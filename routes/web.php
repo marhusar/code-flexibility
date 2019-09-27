@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::get('/post/{postId}', 'PostController@show');
+
+Route::get('/api/v1/post/{postId}', 'Api\V1\PostController@show');

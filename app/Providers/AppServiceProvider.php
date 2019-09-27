@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Authentication\AuthenticatedContext;
 use App\Authentication\Guard;
-use App\Policy\PostPolicy;
-use App\Policy\PostReadPolicy;
+use App\Authentication\Token\SimpleTokenAuthenticator;
+use App\Authentication\Token\TokenAuthenticator;
+use App\Post\Policy\PostPolicy;
+use App\Post\Policy\PostReadPolicy;
 use App\Post\Censor\PostLocker;
 use App\Post\Censor\PostWithTrimmedBodyLocker;
 use App\Post\Repository\InMemoryPostRepository;
@@ -35,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PostReadPolicy::class, PostPolicy::class);
         $this->app->bind(PostRepository::class, InMemoryPostRepository::class);
         $this->app->bind(PostLocker::class, PostWithTrimmedBodyLocker::class);
+        $this->app->bind(TokenAuthenticator::class, SimpleTokenAuthenticator::class);
     }
 }
