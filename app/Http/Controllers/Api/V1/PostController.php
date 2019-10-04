@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Authentication\Token\TokenAuthenticator;
+use App\Http\Action\ShowPostHandler;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostController
 {
-    /** @var TokenAuthenticator */
-    private $tokenAuthenticator;
+    /** @var ShowPostHandler */
+    private $showPostHandler;
 
     /**
-     * @param TokenAuthenticator $tokenAuthenticator
+     * @param ShowPostHandler $showPostHandler
      */
-    public function __construct(TokenAuthenticator $tokenAuthenticator)
+    public function __construct(ShowPostHandler $showPostHandler)
     {
-        $this->tokenAuthenticator = $tokenAuthenticator;
+        $this->showPostHandler = $showPostHandler;
     }
 
     /**
@@ -25,9 +25,7 @@ class PostController
      */
     public function show(int $postId)
     {
-        $user = $this->tokenAuthenticator->getUser();
-
-        $post = null;
+        $post = $this->showPostHandler->showPost($postId);
 
         return new JsonResource((array)$post);
     }

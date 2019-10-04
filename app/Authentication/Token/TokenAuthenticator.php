@@ -2,12 +2,10 @@
 
 namespace App\Authentication\Token;
 
+use App\Authentication\UserAuthenticator;
 use App\User\Contract\User;
 
-interface TokenAuthenticator
+interface TokenAuthenticator extends UserAuthenticator
 {
-    /**
-     * @return User
-     */
-    public function getUser(): User;
+
 }

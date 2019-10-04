@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Authentication\AuthenticatedContext;
-use App\Post\Censor\PostWithTrimmedBodyLocker;
-use App\Post\Policy\PostPolicy;
-use App\Post\Repository\PostRepository;
-use App\Post\View\PostView;
+use App\Http\Action\ShowPostHandler;
 
 class PostController
 {
-    /** @var PostRepository */
-    private $postRepository;
+    /** @var ShowPostHandler */
+    private $showPostHandler;
 
     /**
-     * @param PostRepository $postRepository
+     * @param ShowPostHandler $showPostHandler
      */
-    public function __construct(PostRepository $postRepository)
+    public function __construct(ShowPostHandler $showPostHandler)
     {
-        $this->postRepository = $postRepository;
+        $this->showPostHandler = $showPostHandler;
     }
 
     /**
@@ -28,14 +24,7 @@ class PostController
      */
     public function show(int $postId)
     {
-        $user = AuthenticatedContext::getAuthenticatedUser();
-        $post = $this->postRepository->getPost($postId);
-
-        $postView = new PostView($post->getTitle(), $post->getBody());
-
-        if (PostPolicy::canUserReadPost($user, $post) === false) {
-            $postView = PostWithTrimmedBodyLocker::getCensoredView($post);
-        }
+        $postView = $this->showPostHandler->showPost($postId);
 
         return view('post.show', ['post' => $postView]);
     }
