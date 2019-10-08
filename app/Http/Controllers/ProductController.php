@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Country\Repository\CountryRepository;
+use App\Exceptions\InvalidCountryCodeException;
 use App\Product\Provider\InMemoryProductProvider;
 use Illuminate\Http\Request;
+use Mockery\Exception\InvalidCountException;
 
 class ProductController
 {
@@ -37,9 +39,14 @@ class ProductController
      */
     public function index()
     {
-        $countryCode = $this->request->segment(1);
+        $countryCode = $this->request->route('channel', '');
 
         $country = $this->countryRepository->query()->where('code', '=', $countryCode)->get();
+
+        if ($country === null) {
+            throw new InvalidCountryCodeException($countryCode);
+        }
+
         $products = $this->productProvider->getProductsForCountry($country);
 
         return view('products.index', ['product_list' => $products->all()]);

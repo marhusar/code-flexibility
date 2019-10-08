@@ -6,6 +6,9 @@ use App\Country\Entity\CountryEntity;
 
 class Query
 {
+    /** @var string */
+    private $compareTo;
+
     /**
      * @param string $property
      * @param string $comparision
@@ -15,6 +18,8 @@ class Query
      */
     public function where(string $property, string $comparision, string $compareTo): Query
     {
+        $this->compareTo = $compareTo;
+
         return $this;
     }
 
@@ -31,6 +36,10 @@ class Query
      */
     private function execute()
     {
+        if ($this->compareTo !== 'sk') {
+            return null;
+        }
+
         $country = new CountryEntity();
         $country->setId(1);
         $country->setName('Slovakia');
