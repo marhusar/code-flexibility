@@ -2,8 +2,6 @@
 
 namespace App\Country\Entity;
 
-use App\Country\Contract\Country;
-
 class CountryEntity
 {
     /** @var int */
