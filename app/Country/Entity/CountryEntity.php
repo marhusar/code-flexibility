@@ -2,7 +2,7 @@
 
 namespace App\Country\Entity;
 
-class CountryEntity
+class CountryEntity implements Country
 {
     /** @var int */
     private $id;

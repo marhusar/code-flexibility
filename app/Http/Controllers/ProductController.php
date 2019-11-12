@@ -2,36 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Country\Repository\CountryRepository;
-use App\Exceptions\InvalidCountryCodeException;
-use App\Product\Provider\InMemoryProductProvider;
-use Illuminate\Http\Request;
-use Mockery\Exception\InvalidCountException;
+use App\Http\Action\ShowProductsHandler;
 
 class ProductController
 {
-    /** @var Request */
-    private $request;
-
-    /** @var  CountryRepository */
-    private $countryRepository;
-
-    /** @var InMemoryProductProvider */
-    private $productProvider;
+    /** @var ShowProductsHandler */
+    private $showProductsHandler;
 
     /**
-     * @param Request                 $request
-     * @param CountryRepository       $countryRepository
-     * @param InMemoryProductProvider $productProvider
+     * @param ShowProductsHandler $showProductsHandler
      */
-    public function __construct(
-        Request $request,
-        CountryRepository $countryRepository,
-        InMemoryProductProvider $productProvider
-    ) {
-        $this->request           = $request;
-        $this->countryRepository = $countryRepository;
-        $this->productProvider   = $productProvider;
+    public function __construct(ShowProductsHandler $showProductsHandler)
+    {
+        $this->showProductsHandler = $showProductsHandler;
     }
 
     /**
@@ -39,15 +22,7 @@ class ProductController
      */
     public function index()
     {
-        $countryCode = $this->request->route('channel', '');
-
-        $country = $this->countryRepository->query()->where('code', '=', $countryCode)->get();
-
-        if ($country === null) {
-            throw new InvalidCountryCodeException($countryCode);
-        }
-
-        $products = $this->productProvider->getProductsForCountry($country);
+        $products = $this->showProductsHandler->showProducts();
 
         return view('products.index', ['product_list' => $products->all()]);
     }

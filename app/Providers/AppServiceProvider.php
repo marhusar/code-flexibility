@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Country\Repository\Contract\CountryRepository;
+use App\Illuminate\Request;
 use App\Product\Collection;
 use App\Product\Entity\ProductEntity;
 use App\Product\Provider\InMemoryProductProvider;
+use App\Request\RouteParameterProvider;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
             ->give(function () use ($products) {
                 return new Collection($products);
             });
+
+        $this->app->bind(CountryRepository::class, \App\Country\Repository\CountryRepository::class);
+        $this->app->bind(RouteParameterProvider::class, Request::class);
     }
 
     /**
