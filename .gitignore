@@ -3,6 +3,8 @@
 /public/storage
 /storage/*.key
 /vendor
+/coverage
+/infection
 .env.backup
 .phpunit.result.cache
 Homestead.json
